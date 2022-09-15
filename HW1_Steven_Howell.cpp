@@ -1,89 +1,87 @@
 
 
 #include <iostream>
-#include "intSLList.h"
 #include <string>
 #include <iterator>
+#include <utility>
 #include <vector>
 #include <algorithm>
 #include <bits/stdc++.h>
 
 class Single {
 public:
-    Single *next;
+    Single* next;
     std::string info;
     Single(){
-        next = 0;
+        info = "NULL";
+        next = nullptr;
     }
-    Single(std::string store, Single *ptr = 0){
-        info = store; next = ptr;
+    Single(std::string store, Single *ptr = nullptr){
+        this->info = store;
+        this->next = ptr;
     }
-    /*
-    IntSLLNode() {
-        next = 0;
-    }
-    IntSLLNode(int el, IntSLLNode *ptr = 0) {
-        info = el; next = ptr;
-    }
-    int info;
-    IntSLLNode *next;
-     */
+
 };
 
-class Double {
-public:
-
-    /*
-    IntSLLNode() {
-        next = 0;
-    }
-    IntSLLNode(int el, IntSLLNode *ptr = 0) {
-        info = el; next = ptr;
-    }
-    int info;
-    IntSLLNode *next;
-     */
-};
 class Single_List {
+    Single* head;
+    Single* tail;
 public:
     Single_List() {
-        head = tail = 0;
+
+        head = tail= nullptr;
     }
-    ~Single_List();
-    int isEmpty() {
-        return head == 0;
-    }
-    void addToHead(int);
-    void addToTail(int);
-    int  deleteFromHead(); // delete the head and return its info;
-    int  deleteFromTail(); // delete the tail and return its info;
-    void deleteNode(int);
-    bool isInList(int) const;
-    void printAll() const;
-private:
-    IntSLLNode *head, *tail;
+    //~Single_List();
+    //static int isEmpty() {
+    //    return head == nullptr;
+    //}
+    void addToHead(std::string);
+    //static void addToTail(std::string);
+    //static std::string  deleteFromHead(); // delete the head and return its info;
+    //static std::string  deleteFromTail(); // delete the tail and return its info;
+    //static void deleteNode(std::string);
+    //static bool isInList(std::string);
+    //static void printAll();
+
 };
+/*
+class Double {
+public:
+    Double *next;
+    std::string info;
+    Double(){
+        next = nullptr;
+    }
+    explicit Double(std::string store, Double *ptr = nullptr){
+        info = std::move(store); next = ptr;
+    }
+
+
+};
+
 class Double_List {
 public:
     Double_List() {
-        head = tail = 0;
+        head = tail = nullptr;
     }
     ~Double_List();
     int isEmpty() {
-        return head == 0;
+        return head == nullptr;
     }
-    void addToHead(int);
-    void addToTail(int);
-    int  deleteFromHead(); // delete the head and return its info;
-    int  deleteFromTail(); // delete the tail and return its info;
-    void deleteNode(int);
-    bool isInList(int) const;
+    static void addToHead(std::string);
+    void addToTail(std::string);
+    std::string  deleteFromHead(); // delete the head and return its info;
+    std::string  deleteFromTail(); // delete the tail and return its info;
+    void deleteNode(std::string);
+    bool isInList(std::string) const;
     void printAll() const;
 private:
-    IntSLLNode *head, *tail;
+    static Double *head;
+    static Double *tail;
 };
-
-
+*/
+//static Single_List SL;
+Single_List SL;
 void output_menu(){
     std::cout.width(25);
     std::cout<<"MENU"<<std::endl<<std::endl<<"SLL: IH(0), IT(1), DH(2), DT(3), SD(4), PS(5)"<<std::endl;
@@ -92,7 +90,7 @@ void output_menu(){
 
 }
 
-std::string decision(std::string user_input){
+std::string decision(const std::string& user_input){
     
     std::string key;
     std::string del = " ";
@@ -108,7 +106,7 @@ while (!ss.eof()) {
 */
 
     while (ss >> word) {
-            std::cout << word << std::endl;
+            //std::cout << word << std::endl;
 
             wordlist.push_back(word);
             if(wordlist.size()>2){
@@ -130,6 +128,8 @@ while (!ss.eof()) {
 
     if(wordlist.at(0) == "0"){
         //addToHead();
+        //Single_List::addToHead(wordlist.at(1));
+        SL.addToHead(wordlist.at(1));
     }
 
     if(wordlist.at(0) == "1"){
@@ -146,10 +146,10 @@ while (!ss.eof()) {
 
     }
     if(wordlist.at(0) == "5"){
-
+        //Single_List::printAll();
     }
     if(wordlist.at(0) == "6"){
-
+        //Double_List::addToHead(wordlist.at(1));
     }
     if(wordlist.at(0) == "7"){
 
@@ -167,7 +167,7 @@ while (!ss.eof()) {
 
     }
     if(wordlist.at(0) == "12"){
-        std::cout<<wordlist.at(0)<<std::endl;
+        //std::cout<<wordlist.at(0)<<std::endl;
         key = "exit";
 
     }
@@ -177,20 +177,62 @@ while (!ss.eof()) {
 
     return key;
 }
-
+/*
 Single_List::~Single_List() {
-    for (IntSLLNode *p; !isEmpty(); ) {
+    for (Single *p; !isEmpty(); ) {
+        p = head->next;
+        delete head;
+        head =p;
+    }
+}
+
+Double_List::~Double_List() {
+    for (Double *p; !isEmpty(); ) {
         p = head->next;
         delete head;
         head = p;
     }
 }
 
+*/
+void Single_List::addToHead(std::string data) {
+    Single* Node_Temp = new Single(std::move(data), head);
+    head = Node_Temp;
+            //head = new Single(std::move(data), head);
+    if (tail == nullptr)
+        tail = head;
+}
+
+/*
+void Double_List::addToHead(std::string data) {
+    head = new Double(data,head);
+    if (tail == nullptr)
+        tail = head;
+
+}
 
 
+void Single_List::printAll() {
+    for (Single *tmp = head; tmp != nullptr; tmp = tmp->next)
+        std::cout << tmp->info << " ";
+    std::cout << std::endl;
+}
+
+*/
 
 
 int main(){
+
+
+    //testing
+
+    // Inserting nodes
+
+
+
+
+
+    //Double_List DL;
     std::string exit = "go";
 
     while(exit != "exit"){
